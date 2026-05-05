@@ -1,4 +1,18 @@
+import { useAuth } from "../context/AuthContext"
+
 export default function Home({ setPage }) {
+  const { addToCart } = useAuth()
+
+  const courses = [
+    { emoji: "⚛", title: "React & Next.js", category: "Développement Web", price: "2500 DA", duration: "20h" },
+    { emoji: "🎨", title: "Design UX/UI", category: "Design", price: "1800 DA", duration: "15h" },
+    { emoji: "🐍", title: "Python Data Science", category: "Data & IA", price: "3000 DA", duration: "25h" },
+    { emoji: "📱", title: "Flutter Mobile", category: "Dev Mobile", price: "2800 DA", duration: "22h" },
+    { emoji: "⚙️", title: "Structure Machine 1", category: "Cours Universitaires", price: "800 DA", duration: "30h" },
+    { emoji: "🌐", title: "Réseau & Base de Données", category: "Cours Universitaires", price: "900 DA", duration: "35h" },
+    { emoji: "☁️", title: "Introduction au Cloud", category: "Cours Universitaires", price: "700 DA", duration: "12h" },
+  ]
+
   return (
     <div>
       {/* Hero Section */}
@@ -54,30 +68,28 @@ export default function Home({ setPage }) {
         <h2 className="text-2xl font-bold text-slate-900 mb-6">
           Cours populaires
         </h2>
-         <div className="grid grid-cols-4 gap-5 md:grid-cols-2">
-          {[
-            { emoji: "⚛", title: "React & Next.js", category: "Développement Web", price: "2500 DA" },
-            { emoji: "🎨", title: "Design UX/UI", category: "Design", price: "1800 DA" },
-            { emoji: "🐍", title: "Python Data Science", category: "Data & IA", price: "3000 DA" },
-            { emoji: "📱", title: "Flutter Mobile", category: "Dev Mobile", price: "2800 DA" },
-            { emoji: "⚙️", title: "Structure Machine 1", category: "Cours Universitaires", price: "Gratuit" },
-            { emoji: "🌐", title: "Réseau & Base de Données", category: "Cours Universitaires", price: "Gratuit" },
-            { emoji: "☁️", title: "Introduction au Cloud", category: "Cours Universitaires", price: "Gratuit" },
-          ].map((course) => (
+        <div className="grid grid-cols-4 gap-5 md:grid-cols-2">
+          {courses.map((course) => (
             <div
               key={course.title}
-              onClick={() => setPage("courses")}
-              className="bg-white rounded-2xl border border-slate-200 p-5 cursor-pointer hover:-translate-y-1 transition-transform"
+              className="bg-white rounded-2xl border border-slate-200 p-5 hover:-translate-y-1 transition-transform flex flex-col"
             >
               <div className="h-28 rounded-xl bg-blue-50 flex items-center justify-center text-4xl mb-4">
                 {course.emoji}
               </div>
-              <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+              <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full w-fit">
                 {course.category}
               </span>
-              <h3 className="font-bold text-slate-900 mt-3 mb-4">{course.title}</h3>
-              <div className="flex justify-between items-center">
+              <h3 className="font-bold text-slate-900 mt-3 mb-1">{course.title}</h3>
+              <div className="text-xs text-slate-400 mb-4">⏱ {course.duration}</div>
+              <div className="flex justify-between items-center mt-auto">
                 <span className="font-bold text-blue-600">{course.price}</span>
+                <button
+                  onClick={() => addToCart(course)}
+                  className="text-xs px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  + Panier
+                </button>
               </div>
             </div>
           ))}
