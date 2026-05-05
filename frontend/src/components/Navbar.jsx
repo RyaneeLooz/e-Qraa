@@ -15,10 +15,13 @@ export default function Navbar({ page, setPage }) {
           onClick={() => setPage("home")}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">Q</span>
+          <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
+              <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.939.69 5.25 1.936V4.533z" />
+              <path d="M12.75 4.533v16.153a8.215 8.215 0 015.25-1.936 8.237 8.237 0 012.75.462.75.75 0 001-.707V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533z" />
+            </svg>
           </div>
-          <span className="font-bold text-lg text-slate-900">
+          <span className="font-bold text-xl text-slate-900 tracking-tight">
             e-<span className="text-blue-600">Qraa</span>
           </span>
         </div>

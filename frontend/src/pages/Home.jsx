@@ -16,17 +16,31 @@ export default function Home({ setPage }) {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-700 to-blue-500 text-white py-20 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <span className="inline-block bg-white/20 text-sm px-4 py-1 rounded-full mb-6">
-            ✨ La plateforme d'apprentissage algérienne
-          </span>
-          <h1 className="text-5xl font-extrabold mb-4 leading-tight">
-            Apprenez. Enseignez. <span className="text-blue-200">Évoluez.</span>
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 to-blue-500 py-24 px-6 text-center">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-[30%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-b from-blue-400/30 to-transparent blur-3xl rounded-full"></div>
+          <div className="absolute -bottom-[20%] -left-[10%] w-[50%] h-[50%] bg-gradient-to-t from-blue-800/30 to-transparent blur-3xl rounded-full"></div>
+        </div>
+
+        <div className="relative max-w-4xl mx-auto z-10">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-sm font-medium px-4 py-2 rounded-full mb-8 shadow-sm backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-100 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+            </span>
+            Nouvelle méthode d'apprentissage
+          </div>
+          
+          <h2 className="text-2xl md:text-3xl font-medium mb-3 text-blue-100 tracking-wide">
+            Propulsez votre carrière avec
+          </h2>
+          <h1 className="text-7xl md:text-8xl lg:text-9xl font-black mb-8 leading-none tracking-tighter text-white drop-shadow-lg">
+            e-Qraa
           </h1>
-          <p className="text-lg opacity-90 mb-8">
-            Connectez-vous avec les meilleurs formateurs algériens pour
-            accélérer votre carrière professionnelle.
+          
+          <p className="text-lg md:text-xl text-blue-50 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Rejoignez l'élite. Formez-vous avec les meilleurs experts universitaires et professionnels, gagnez des Coins et montez dans le classement.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button
