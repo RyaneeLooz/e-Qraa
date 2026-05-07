@@ -1,0 +1,63 @@
+{
+  "project": "e-Qraa",
+  "role": "FRONTEND DEVELOPER",
+  "owner": "Toi (le développeur frontend)",
+  "last_updated": "2026-05-07",
+  "tech_stack": {
+    "framework": "React 19 + Vite 8",
+    "styling": "TailwindCSS v4",
+    "state_management": "React Context API (AuthContext)",
+    "routing": "useState manual (react-router-dom installé mais pas utilisé)",
+    "language": "JavaScript (JSX)"
+  },
+
+  "frontend_summary": {
+    "description": "Marketplace éducative algérienne. Les étudiants achètent des cours avec des 'Coins'. Les formateurs publient des cours et reçoivent 80% des revenus. L'admin gère la plateforme.",
+    "currency_model": {
+      "internal": "Coins (jaunes 🟡, prix psychologiques: 2490, 1790...)",
+      "free_courses": "Les 'Cours Universitaires' sont GRATUITS (affichés en vert 🟢)",
+      "real_money": "DA (Dinars Algériens) - pour acheter des Coins",
+      "commission": "20% prélevé par la plateforme sur les cours payants"
+    }
+  },
+
+  "files_completed": {
+    "pages": {
+      "Home.jsx": "Accueil avec hero, grille de cours (prix jaunes, gratuit vert), stats et Footer.",
+      "Login.jsx": "Connexion avec détection automatique Admin (admin@e-qraa.dz).",
+      "Register.jsx": "Inscription avec champs spécifiques formateur (isVerified=false).",
+      "Courses.jsx": "Catalogue avec filtres et recherche. Cours universitaires gratuits.",
+      "Instructors.jsx": "Liste des profs avec modal d'avis PRIVÉ (étoiles + texte).",
+      "Dashboard.jsx": "Vues Student/Instructor/Admin. Bannière de vérification pour profs.",
+      "Cart.jsx": "Gestion du panier et checkout en Coins.",
+      "Admin.jsx": "Panel complet: Stats, Vérification formateurs, Utilisateurs, Codes Promo.",
+      "About.jsx": "Page d'information."
+    },
+    "components": {
+      "Navbar.jsx": "Navigation responsive avec menu hamburger mobile. Icônes panier/coins masquées pour profs.",
+      "Footer.jsx": "Pied de page professionnel complet.",
+      "CourseForm.jsx": "Formulaire de création avec onglets: Infos (commission auto) et Contenu (Vidéos & QCM builder).",
+      "CourseTable.jsx": "Tableau triable (prix jaunes/verts)."
+    },
+    "context": {
+      "AuthContext.jsx": "Gestion globale user, panier et solde Coins."
+    }
+  },
+
+  "remaining_tasks": {
+    "priority_high": [
+      { "id": "FE-01", "title": "Service API (api.js)", "description": "Créer les appels axios/fetch vers le futur backend.", "file": "frontend/src/services/api.js" },
+      { "id": "FE-02", "title": "Lier AuthContext à l'API", "description": "Remplacer les mocks par les vrais appels login/register.", "file": "frontend/src/context/AuthContext.jsx" },
+      { "id": "FE-03", "title": "Dynamiser les données", "description": "Remplacer les tableaux MOCK par des données chargées via l'API.", "files": ["Home.jsx", "Courses.jsx", "Instructors.jsx", "Dashboard.jsx"] }
+    ],
+    "priority_medium": [
+      { "id": "FE-04", "title": "Migration React Router", "description": "Passer du useState manual au vrai routage d'URL.", "file": "App.jsx" },
+      { "id": "FE-05", "title": "Page CourseDetail", "description": "Page complète pour voir le contenu d'un cours avant achat.", "file": "frontend/src/pages/CourseDetail.jsx" },
+      { "id": "FE-06", "title": "Loading & Errors", "description": "Ajouter des Spinners et Toasts d'erreur.", "files": ["toutes les pages"] }
+    ],
+    "priority_low": [
+      { "id": "FE-07", "title": "Profil Utilisateur", "description": "Modifier les infos personnelles et photo.", "file": "frontend/src/pages/Profile.jsx" },
+      { "id": "FE-08", "title": "Paiement Réel", "description": "Intégration Chargily (CIB/Edahabia).", "depends_on": "Backend" }
+    ]
+  }
+}
