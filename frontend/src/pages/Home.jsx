@@ -4,13 +4,13 @@ export default function Home({ setPage }) {
   const { addToCart } = useAuth()
 
   const courses = [
-    { emoji: "⚛", title: "React & Next.js", category: "Développement Web", price: "2500 DA", duration: "20h" },
-    { emoji: "🎨", title: "Design UX/UI", category: "Design", price: "1800 DA", duration: "15h" },
-    { emoji: "🐍", title: "Python Data Science", category: "Data & IA", price: "3000 DA", duration: "25h" },
-    { emoji: "📱", title: "Flutter Mobile", category: "Dev Mobile", price: "2800 DA", duration: "22h" },
-    { emoji: "⚙️", title: "Structure Machine 1", category: "Cours Universitaires", price: "800 DA", duration: "30h" },
-    { emoji: "🌐", title: "Réseau & Base de Données", category: "Cours Universitaires", price: "900 DA", duration: "35h" },
-    { emoji: "☁️", title: "Introduction au Cloud", category: "Cours Universitaires", price: "700 DA", duration: "12h" },
+    { emoji: "⚛", title: "React & Next.js", category: "Développement Web", price: "2490 Coins", duration: "20h" },
+    { emoji: "🎨", title: "Design UX/UI", category: "Design", price: "1790 Coins", duration: "15h" },
+    { emoji: "🐍", title: "Python Data Science", category: "Data & IA", price: "2990 Coins", duration: "25h" },
+    { emoji: "📱", title: "Flutter Mobile", category: "Dev Mobile", price: "2790 Coins", duration: "22h" },
+    { emoji: "⚙️", title: "Structure Machine 1", category: "Cours Universitaires", price: "Gratuit", duration: "30h" },
+    { emoji: "🌐", title: "Réseau & Base de Données", category: "Cours Universitaires", price: "Gratuit", duration: "35h" },
+    { emoji: "☁️", title: "Introduction au Cloud", category: "Cours Universitaires", price: "Gratuit", duration: "12h" },
   ]
 
   return (
@@ -97,7 +97,9 @@ export default function Home({ setPage }) {
               <h3 className="font-bold text-slate-900 mt-3 mb-1">{course.title}</h3>
               <div className="text-xs text-slate-400 mb-4">⏱ {course.duration}</div>
               <div className="flex justify-between items-center mt-auto">
-                <span className="font-bold text-blue-600">{course.price}</span>
+                <span className={`font-bold ${course.price === "Gratuit" ? "text-green-600" : "text-yellow-600"}`}>
+                  {course.price}
+                </span>
                 <button
                   onClick={() => addToCart(course)}
                   className="text-xs px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"

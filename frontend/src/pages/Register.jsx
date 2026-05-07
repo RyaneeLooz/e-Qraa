@@ -10,7 +10,9 @@ export default function Register({ setPage }) {
     password: "",
     confirmPassword: "",
     role: "student",
-    university: ""
+    university: "",
+    specialty: "",
+    idCard: ""
   })
   const [errors, setErrors] = useState({})
 
@@ -55,7 +57,7 @@ export default function Register({ setPage }) {
         name: formData.name,
         email: formData.email,
         role: formData.role,
-        university: formData.university
+        isVerified: formData.role === 'student' // Les étudiants sont vérifiés d'office, pas les profs
       }
       login(user)
       setPage("home")
@@ -126,6 +128,42 @@ export default function Register({ setPage }) {
             />
             {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
           </div>
+
+          {formData.role === 'instructor' && (
+            <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Spécialité / Matière enseignée
+                </label>
+                <input
+                  name="specialty"
+                  type="text"
+                  required
+                  value={formData.specialty}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-600 focus:outline-none transition-colors"
+                  placeholder="ex: Mathématiques, Développement Web..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Justificatif (Numéro de carte prof / Diplôme)
+                </label>
+                <input
+                  name="idCard"
+                  type="text"
+                  required
+                  value={formData.idCard}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-600 focus:outline-none transition-colors"
+                  placeholder="Numéro de document pour vérification"
+                />
+                <p className="mt-1.5 text-[10px] text-slate-500 italic">
+                  🛡️ Votre compte sera vérifié manuellement par nos administrateurs avant toute publication.
+                </p>
+              </div>
+            </div>
+          )}
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">

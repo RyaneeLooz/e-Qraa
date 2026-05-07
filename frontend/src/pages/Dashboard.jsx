@@ -19,11 +19,10 @@ function StudentDashboard({ user }) {
     { rank: 5, name: "Lina M.", points: 2100, isMe: false },
   ]
 
-  const [showPacks, setShowPacks] = useState(false)
   const coinPacks = [
-    { coins: 1000, price: "1000 DA" },
-    { coins: 2500, price: "2400 DA", bonus: "Éco" },
-    { coins: 5000, price: "4500 DA", bonus: "Populaire" },
+    { coins: 1490, price: "1200 DA", label: "Pack Découverte" },
+    { coins: 3990, price: "2900 DA", bonus: "Plus Populaire", label: "+990 offerts" },
+    { coins: 9990, price: "6500 DA", bonus: "Meilleure Valeur", label: "+3490 offerts" },
   ]
 
   return (
@@ -94,7 +93,7 @@ function StudentDashboard({ user }) {
           <div className="text-xs font-bold text-slate-500 uppercase mb-3">Option 2 : Paiement par carte Edahabia / CIB</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {coinPacks.map((pack, idx) => (
-              <div key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-yellow-100 flex items-center justify-between hover:border-yellow-400 cursor-pointer transition-colors relative">
+              <div key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-yellow-100 flex items-center justify-between hover:border-yellow-400 cursor-pointer transition-colors relative group">
                 {pack.bonus && (
                   <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
                     {pack.bonus}
@@ -102,14 +101,15 @@ function StudentDashboard({ user }) {
                 )}
                 <div>
                   <div className="font-bold text-lg text-yellow-500">{pack.coins} 🟡</div>
-                  <div className="text-sm font-medium text-slate-600">{pack.price}</div>
+                  <div className="text-sm font-bold text-slate-900">{pack.price}</div>
+                  <div className="text-[10px] text-slate-400 font-medium uppercase tracking-tighter">{pack.label}</div>
                 </div>
                 <button 
                   onClick={() => {
                     alert(`Redirection vers la passerelle sécurisée (Chargily) pour ${pack.price}. Le solde sera ajouté instantanément.`)
                     setShowPacks(false)
                   }}
-                  className="px-4 py-2 bg-yellow-50 text-yellow-600 font-bold text-sm rounded-lg hover:bg-yellow-100 transition-colors"
+                  className="px-4 py-2 bg-yellow-50 text-yellow-600 font-bold text-sm rounded-lg group-hover:bg-yellow-500 group-hover:text-white transition-colors"
                 >
                   Payer
                 </button>
@@ -178,7 +178,7 @@ function StudentDashboard({ user }) {
 function InstructorDashboard({ user }) {
   const [showCourseForm, setShowCourseForm] = useState(false)
   const [myCourses] = useState([
-    { id: 1, title: "Développement Flutter", sales: 120, revenue: 268800 } // Revenue en DA après 20% commission
+    { id: 1, title: "Développement Flutter", sales: 120, revenue: 268800 } // Revenue en Coins après 20% commission
   ])
 
   if (showCourseForm) {
@@ -198,25 +198,44 @@ function InstructorDashboard({ user }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="text-slate-500 mb-1">Revenus Nets (80%)</div>
-          <div className="text-3xl font-bold text-green-600">268,800 DA</div>
+          <div className="text-3xl font-bold text-green-600">268,800 Coins</div>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="text-slate-500 mb-1">Mes Cours</div>
           <div className="text-3xl font-bold text-slate-900">{myCourses.length}</div>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <div className="text-slate-500 mb-1">Questions d'étudiants</div>
-          <div className="text-3xl font-bold text-orange-500">5 en attente</div>
+          <div className="text-slate-500 mb-1">Avis d'étudiants</div>
+          <div className="text-3xl font-bold text-yellow-500">24 nouveaux</div>
         </div>
       </div>
+      
+      {!user.isVerified && (
+        <div className="bg-orange-50 border border-orange-200 p-6 rounded-2xl flex flex-col md:flex-row items-center gap-4 animate-pulse">
+          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-2xl">
+            ⏳
+          </div>
+          <div className="flex-1 text-center md:text-left">
+            <h4 className="font-bold text-orange-800">Compte en cours de vérification</h4>
+            <p className="text-sm text-orange-700">
+              Nos administrateurs examinent vos documents. Vous pourrez publier vos cours et interagir avec les étudiants dès que votre profil sera validé (généralement sous 24h).
+            </p>
+          </div>
+          <div className="text-xs font-bold bg-orange-200 text-orange-800 px-3 py-1 rounded-full uppercase">
+            Statut: En attente
+          </div>
+        </div>
+      )}
 
       {/* Mes Cours Actuels */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold text-slate-900">Mes Cours publiés</h3>
           <button 
-            onClick={() => setShowCourseForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition"
+            onClick={() => user.isVerified ? setShowCourseForm(true) : alert("Votre compte doit être vérifié par un administrateur avant de pouvoir créer un cours.")}
+            className={`px-4 py-2 text-white text-sm font-medium rounded-xl transition ${
+              user.isVerified ? "bg-blue-600 hover:bg-blue-700" : "bg-slate-300 cursor-not-allowed"
+            }`}
           >
             + Créer un cours
           </button>
@@ -236,7 +255,7 @@ function InstructorDashboard({ user }) {
               <tr key={course.id}>
                 <td className="py-4 font-medium text-slate-800">{course.title}</td>
                 <td className="py-4 text-slate-600">{course.sales}</td>
-                <td className="py-4 font-bold text-green-600">{course.revenue} DA</td>
+                <td className="py-4 font-bold text-green-600">{course.revenue} Coins</td>
                 <td className="py-4 text-right">
                   <button className="text-blue-600 hover:text-blue-800 font-medium text-sm">Gérer</button>
                 </td>
@@ -289,7 +308,7 @@ function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-blue-600 p-6 rounded-2xl shadow-sm text-white">
           <div className="opacity-80 mb-1">Chiffre d'affaires (Commission 20%)</div>
-          <div className="text-3xl font-bold">2,900,000 DA</div>
+          <div className="text-3xl font-bold">2,900,000 Coins</div>
         </div>
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="text-slate-500 mb-1">Total Utilisateurs</div>

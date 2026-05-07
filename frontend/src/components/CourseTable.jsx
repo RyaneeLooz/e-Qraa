@@ -19,7 +19,7 @@ export default function CourseTable({ courses, onAddToCart }) {
       let aValue = a[sortConfig.key]
       let bValue = b[sortConfig.key]
 
-      // Handle price sorting (remove DA and convert to number)
+      // Handle price sorting (remove non-digits and convert to number)
       if (sortConfig.key === "price") {
         aValue = parseInt(aValue.toString().replace(/\D/g, "")) || 0
         bValue = parseInt(bValue.toString().replace(/\D/g, "")) || 0
@@ -117,7 +117,9 @@ export default function CourseTable({ courses, onAddToCart }) {
                     {course.status}
                   </span>
                 </td>
-                <td className="p-4 font-bold text-blue-600">{course.price}</td>
+                <td className={`p-4 font-bold ${course.price === "Gratuit" ? "text-green-600" : "text-yellow-600"}`}>
+                  {course.price}
+                </td>
                 <td className="p-4">
                   <button
                     onClick={() => onAddToCart(course)}

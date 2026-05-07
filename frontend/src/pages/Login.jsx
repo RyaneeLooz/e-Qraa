@@ -39,14 +39,16 @@ export default function Login({ setPage }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (validate()) {
-      // Mock user login
+      // Détection automatique du rôle admin via email secret
+      const isAdmin = formData.email.toLowerCase() === "admin@e-qraa.dz"
       const user = {
-        name: formData.email.split("@")[0],
+        name: isAdmin ? "Administrateur" : formData.email.split("@")[0],
         email: formData.email,
-        role: formData.role
+        role: isAdmin ? "admin" : formData.role,
+        isVerified: true
       }
       login(user)
-      setPage("home")
+      setPage(isAdmin ? "admin" : "home")
     }
   }
 

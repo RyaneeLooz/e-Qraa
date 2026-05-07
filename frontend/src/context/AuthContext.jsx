@@ -5,6 +5,7 @@ const AuthContext = createContext()
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [cart, setCart] = useState([])
+  const [coins, setCoins] = useState(1500) // Solde initial pour la démo
 
   const login = (userData) => {
     setUser(userData)
@@ -27,8 +28,12 @@ export function AuthProvider({ children }) {
     setCart((prev) => prev.filter((c) => c.title !== title))
   }
 
+  const addCoins = (amount) => {
+    setCoins((prev) => prev + amount)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, cart, addToCart, removeFromCart }}>
+    <AuthContext.Provider value={{ user, login, logout, cart, addToCart, removeFromCart, coins, addCoins }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const MOCK_INSTRUCTORS = [
   {
     id: 1,
@@ -67,9 +69,110 @@ const MOCK_INSTRUCTORS = [
   }
 ]
 
-export default function Instructors({ setPage }) {
+export default function Instructors({ setPage, onNavigateToCourses }) {
+  const [selectedInstructor, setSelectedInstructor] = useState(null)
+  const [review, setReview] = useState({ rating: 5, comment: "" })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    // Simuler un envoi API
+    setTimeout(() => {
+      alert(`Merci ! Votre avis sur ${selectedInstructor.name} a été envoyé de manière confidentielle. Il sera examiné par l'administration et transmis au formateur.`)
+      setIsSubmitting(false)
+      setSelectedInstructor(null)
+      setReview({ rating: 5, comment: "" })
+    }, 1000)
+  }
+
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Modal d'évaluation */}
+      {selectedInstructor && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">Évaluer {selectedInstructor.name}</h2>
+                  <p className="text-sm text-slate-500 mt-1">Partagez votre expérience de manière constructive.</p>
+                </div>
+                <button 
+                  onClick={() => setSelectedInstructor(null)}
+                  className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmitReview} className="space-y-6">
+                {/* Étoiles */}
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-3 text-center uppercase tracking-wider">
+                    Votre Note
+                  </label>
+                  <div className="flex justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setReview({ ...review, rating: star })}
+                        className={`text-3xl transition-transform hover:scale-125 ${
+                          star <= review.rating ? "grayscale-0" : "grayscale opacity-30"
+                        }`}
+                      >
+                        ⭐
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Commentaire */}
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                    Votre Commentaire (Privé)
+                  </label>
+                  <textarea
+                    required
+                    value={review.comment}
+                    onChange={(e) => setReview({ ...review, comment: e.target.value })}
+                    rows={4}
+                    placeholder="Qu'avez-vous pensé de la pédagogie ? Points forts, points à améliorer..."
+                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                  ></textarea>
+                </div>
+
+                {/* Warning de confidentialité */}
+                <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-start gap-3">
+                  <span className="text-xl">🔒</span>
+                  <p className="text-xs text-blue-700 leading-relaxed">
+                    <span className="font-bold">Confidentialité garantie :</span> Ce commentaire ne sera <span className="underline">jamais affiché publiquement</span> sur le profil du formateur. Il sera transmis uniquement au formateur et aux administrateurs pour assurer la qualité de l'enseignement.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInstructor(null)}
+                    className="flex-1 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-2 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all disabled:opacity-50 shadow-lg shadow-blue-200"
+                  >
+                    {isSubmitting ? "Envoi en cours..." : "Envoyer mon avis"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="text-center mb-16">
         <h1 className="text-4xl font-bold text-slate-900 mb-4">Nos Formateurs d'Élite</h1>
         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -117,13 +220,13 @@ export default function Instructors({ setPage }) {
 
               <div className="flex gap-2 mt-6">
                 <button 
-                  onClick={() => alert(`Évaluer ${instructor.name} : La note sera publique, mais votre commentaire sera strictement privé (visible uniquement par le formateur et l'administration).`)}
+                  onClick={() => setSelectedInstructor(instructor)}
                   className="w-1/3 py-2 bg-yellow-50 text-yellow-600 rounded-xl font-bold text-sm hover:bg-yellow-100 transition-colors"
                 >
                   ⭐ Évaluer
                 </button>
                 <button 
-                  onClick={() => setPage("courses")}
+                  onClick={() => onNavigateToCourses(instructor.name)}
                   className="w-2/3 py-2 border border-blue-600 text-blue-600 rounded-xl font-bold hover:bg-blue-50 transition-colors text-sm"
                 >
                   Voir ses cours
