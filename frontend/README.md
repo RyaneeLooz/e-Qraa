@@ -1,16 +1,26 @@
-# React + Vite
+# e-Qraa Frontend 🎨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ceci est la partie client de la plateforme e-Qraa.
 
-Currently, two official plugins are available:
+## 🚀 Démarrage rapide
+```bash
+npm install
+npm run dev
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🏗 Architecture
+- `src/pages/` : Les vues principales (Home, Courses, Dashboard, etc.).
+- `src/components/` : Les composants réutilisables (Navbar, Footer, CourseForm, etc.).
+- `src/context/` : Gestion de l'état global (Auth, Cart, Coins).
+- `src/services/` : (À remplir) Appels API vers le backend.
 
-## React Compiler
+## 🎨 Design
+Le projet utilise **Tailwind CSS v4** avec une palette personnalisée :
+- **Primaire** : Blue-600
+- **Coins** : Yellow-600
+- **Gratuité** : Green-600
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🧪 Tests
+Pour tester les différents rôles sans backend :
+- **Admin** : `admin@e-qraa.dz`
+- **Prof** : Créez un compte via `/register` (isVerified simulé dans `Dashboard.jsx`).
