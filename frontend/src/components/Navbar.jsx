@@ -83,11 +83,11 @@ export default function Navbar({ page, setPage }) {
                   setShowCoins(!showCoins)
                   setShowCart(false)
                 }}
-                className="flex items-center gap-2 px-3 py-2 bg-yellow-400 text-slate-900 rounded-xl hover:bg-yellow-500 transition shadow-sm border border-yellow-500/20"
+                className="flex items-center gap-4 px-4 py-2 bg-yellow-400 text-slate-900 rounded-xl hover:bg-yellow-500 transition shadow-sm border border-yellow-500/20"
               >
-                <span className="text-lg">🟡</span>
-                <span className="font-bold text-sm">{coins}</span>
-                <span className="hidden md:inline text-[10px] font-bold uppercase opacity-70">Recharger</span>
+                <span className="text-lg leading-none filter drop-shadow-sm">🟡</span>
+                <span className="font-bold text-sm leading-none">{coins}</span>
+                <span className="hidden md:inline text-[10px] font-bold uppercase opacity-70 ml-2">Recharger</span>
               </button>
 
               {showCoins && (
