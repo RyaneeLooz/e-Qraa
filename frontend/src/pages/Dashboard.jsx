@@ -4,7 +4,8 @@ import CourseForm from "../components/CourseForm"
 
 // --- VUE ÉTUDIANT ---
 function StudentDashboard({ user }) {
-  const [coins, setCoins] = useState(1500) // Solde initial mocké
+  const { coins } = useAuth()
+  const [showPacks, setShowPacks] = useState(false)
   const [courses] = useState([
     { id: 1, title: "React pour les débutants", progress: "80%" },
     { id: 2, title: "Structure Machine 1", progress: "100%" }
@@ -28,10 +29,12 @@ function StudentDashboard({ user }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Solde de Coins */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
-          <div className="text-slate-500 mb-1">Mon Solde</div>
-          <div className="text-3xl font-bold text-yellow-500">{coins} 🟡</div>
+          <div className="text-slate-500 mb-1 text-sm font-medium">Mon Solde</div>
+          <div className="flex items-center gap-3 text-3xl font-bold text-yellow-500 mb-8 mt-2">
+            <span className="drop-shadow-sm">🟡</span>
+            <span>{coins}</span>
+          </div>
           <button 
             onClick={() => setShowPacks(!showPacks)}
             className="mt-auto pt-4 w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl font-medium transition-colors"
