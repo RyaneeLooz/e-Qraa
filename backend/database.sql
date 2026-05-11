@@ -17,6 +17,7 @@ CREATE TABLE users (
     id_card_number VARCHAR(50),         -- Justificatif prof
     is_verified BOOLEAN DEFAULT FALSE,  -- Validation manuelle admin
     coins INT DEFAULT 0,
+    avatar_url VARCHAR(255),
     reset_token VARCHAR(255),
     reset_token_expiry TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -43,9 +44,9 @@ CREATE TABLE enrollments (
     PRIMARY KEY (student_id, course_id)
 );
 
--- 2. REQUÊTE DE TYPE ALTER
--- Ajout d'une colonne pour la biographie des instructeurs
+-- Ajout d'une colonne pour la biographie des instructeurs et avatar
 ALTER TABLE users ADD COLUMN bio TEXT;
+ALTER TABLE users ADD COLUMN avatar_url VARCHAR(255);
 
 -- 3. MANIPULATION DE DONNÉES (DML)
 

@@ -4,7 +4,7 @@ exports.getProfile = async (req, res) => {
   try {
     // req.user comes from the auth middleware
     const result = await db.query(
-      'SELECT id, name, email, role, coins, created_at FROM users WHERE id = $1',
+      'SELECT id, name, email, role, coins, bio, avatar_url, created_at FROM users WHERE id = $1',
       [req.user.id]
     );
     
@@ -16,6 +16,42 @@ exports.getProfile = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Erreur lors de la récupération du profil' });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  const { name, bio, university, specialty } = req.body;
+  try {
+    const result = await db.query(
+      'UPDATE users SET name = COALESCE($1, name), bio = COALESCE($2, bio), university = COALESCE($3, university), specialty = COALESCE($4, specialty) WHERE id = $5 RETURNING id, name, bio, university, specialty',
+      [name, bio, university, specialty, req.user.id]
+    );
+    res.status(200).json({ message: 'Profil mis à jour', user: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur lors de la mise à jour du profil' });
+  }
+};
+
+exports.uploadAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Veuillez sélectionner une image' });
+    }
+
+    const avatar_url = `/uploads/avatars/${req.file.filename}`;
+    
+    // Optional: Delete old avatar from disk here
+
+    const result = await db.query(
+      'UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING avatar_url',
+      [avatar_url, req.user.id]
+    );
+
+    res.status(200).json({ message: 'Photo de profil mise à jour', avatar_url: result.rows[0].avatar_url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur lors de l'upload de l'avatar" });
   }
 };
 

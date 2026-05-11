@@ -4,11 +4,15 @@ const userController = require('../controllers/userController');
 const auth = require('../middleware/auth');
 const checkRole = require('../middleware/checkRole');
 
+const upload = require('../config/multer');
+
 // All routes here require authentication
 router.use(auth);
 
-// Get my own profile
+// Profile management
 router.get('/profile', userController.getProfile);
+router.put('/profile', userController.updateProfile);
+router.post('/avatar', upload.single('avatar'), userController.uploadAvatar);
 
 // Update my coins (Exemple : via un code promo)
 router.post('/add-coins', userController.updateCoins);

@@ -20,6 +20,16 @@ router.post('/',
   courseController.createCourse
 );
 
+router.put('/:id', 
+  auth, 
+  checkRole(['instructor', 'admin']), 
+  upload.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'video', maxCount: 1 }
+  ]), 
+  courseController.updateCourse
+);
+
 router.delete('/:id', auth, courseController.deleteCourse);
 
 module.exports = router;

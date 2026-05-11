@@ -1,0 +1,62 @@
+{
+  "remaining_tasks": {
+    "database_and_crud": [
+      {
+        "id": "CRUD_01",
+        "task": "Update Course Route",
+        "description": "Implémenter la route PUT /api/courses/:id pour permettre aux instructeurs de modifier leurs cours (titre, prix, description).",
+        "status": "A faire"
+      },
+      {
+        "id": "CRUD_02",
+        "task": "Instructor Dashboard Stats",
+        "description": "Créer une route pour que l'instructeur voie le nombre d'étudiants inscrits et ses gains totaux (80%).",
+        "status": "A faire"
+      },
+      {
+        "id": "CRUD_03",
+        "task": "Fix Enrollment Transactions",
+        "description": "Corriger la logique des transactions SQL dans enrollmentController pour utiliser un client dédié du pool.",
+        "status": "A faire"
+      }
+    ],
+    "uploads_management": [
+      {
+        "id": "UPL_01",
+        "task": "User Avatars",
+        "description": "Configurer Multer pour l'upload des photos de profil et ajouter le champ avatar_url dans la table users.",
+        "status": "A faire"
+      },
+      {
+        "id": "UPL_02",
+        "task": "File Cleanup Logic",
+        "description": "S'assurer que lorsqu'un cours est supprimé, la vidéo et la miniature correspondantes sont supprimées du serveur.",
+        "status": "A faire"
+      }
+    ],
+    "economic_logic": [
+      {
+        "id": "ECO_01",
+        "task": "Price Validation",
+        "description": "Ajouter une validation pour s'assurer que les prix finissent par 90 (ex: 1490, 2490) lors de la création/maj.",
+        "status": "A faire"
+      },
+      {
+        "id": "ECO_02",
+        "task": "Admin Financial Overview",
+        "description": "Créer une route admin pour voir le total des commissions (20%) générées par la plateforme.",
+        "status": "A faire"
+      }
+    ],
+    "security_and_validation": [
+      {
+        "id": "SEC_01",
+        "task": "Express Validator Integration",
+        "description": "Ajouter des validateurs sur toutes les routes POST/PUT pour sécuriser les entrées de données.",
+        "status": "A faire"
+      }
+    ]
+  },
+  "completion_estimate": "75%",
+  "next_priority": "CRUD_01 & UPL_01"
+}
