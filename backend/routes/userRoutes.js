@@ -1,0 +1,23 @@
+const express = require('express');
+const router = express.Router();
+const userController = require('../controllers/userController');
+const auth = require('../middleware/auth');
+const checkRole = require('../middleware/checkRole');
+
+// All routes here require authentication
+router.use(auth);
+
+// Get my own profile
+router.get('/profile', userController.getProfile);
+
+// Update my coins (Exemple : via un code promo)
+router.post('/add-coins', userController.updateCoins);
+
+// Exemple de route protégée par rôle : seul un admin peut voir tous les utilisateurs
+router.get('/admin/all', checkRole(['admin']), async (req, res) => {
+  const db = require('../config/db');
+  const result = await db.query('SELECT id, name, email, role FROM users');
+  res.json(result.rows);
+});
+
+module.exports = router;
