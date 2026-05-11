@@ -12,6 +12,10 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) DEFAULT 'student', -- student, instructor, admin
+    university VARCHAR(100),            -- Pour les étudiants
+    specialty VARCHAR(100),             -- Pour les profs
+    id_card_number VARCHAR(50),         -- Justificatif prof
+    is_verified BOOLEAN DEFAULT FALSE,  -- Validation manuelle admin
     coins INT DEFAULT 0,
     reset_token VARCHAR(255),
     reset_token_expiry TIMESTAMP,
@@ -22,8 +26,11 @@ CREATE TABLE users (
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
+    description TEXT,
     price INT NOT NULL,
     category VARCHAR(50),
+    thumbnail_url VARCHAR(255),
+    video_url VARCHAR(255),
     instructor_id INT REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

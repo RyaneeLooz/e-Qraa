@@ -20,4 +20,8 @@ router.get('/admin/all', checkRole(['admin']), async (req, res) => {
   res.json(result.rows);
 });
 
+// Admin: Manage instructors
+router.get('/admin/pending-instructors', checkRole(['admin']), userController.getPendingInstructors);
+router.put('/admin/verify-instructor/:instructorId', checkRole(['admin']), userController.verifyInstructor);
+
 module.exports = router;
