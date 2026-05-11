@@ -4,16 +4,16 @@
   "owner": "Ton ami (le développeur backend)",
   "last_updated": "2026-05-11",
   "repo": "https://github.com/RyaneeLooz/e-Qraa",
-  "frontend_status": "100% Terminé. Admin panel prêt.",
-  "collaboration_note": "Ton ami (l'utilisateur principal) s'occupe de la SÉCURITÉ et du MAILING. Toi, occupe-toi de la BDD SQL et des UPLOADS.",
+  "backend_status": "100% Terminé. Backend SQL, Uploads, Sécurité et Mailing opérationnels.",
+  "collaboration_note": "Le backend est totalement fini. Prochaine étape : Intégration Frontend.",
 
-  "instructions": "Le socle SQL est posé. Ta mission est de développer les routes CRUD et la gestion des fichiers lourds.",
+  "instructions": "Le socle SQL et toute la logique métier sont prêts. Toutes les routes sont sécurisées.",
 
   "economic_model": {
     "currency": "Coins (e-Qraa Coins)",
-    "price_logic": "Prix psychologiques finissant par 90 (ex: 2490).",
-    "free_logic": "La catégorie 'Cours Universitaires' doit être GRATUITE (0 Coins).",
-    "commission": "La plateforme prend 20%. Le formateur reçoit 80%.",
+    "price_logic": "Prix psychologiques finissant par 90 (ex: 2490). [DONE]",
+    "free_logic": "La catégorie 'Cours Universitaires' doit être GRATUITE (0 Coins). [DONE]",
+    "commission": "La plateforme prend 20%. Le formateur reçoit 80%. [DONE]",
     "recharge": {
       "1200 DA": "1490 Coins",
       "2900 DA": "3990 Coins",
@@ -23,26 +23,26 @@
 
   "core_tasks": {
     "database": {
-      "title": "CRUD & SQL",
-      "desc": "Développer les routes d'API pour les cours et les inscriptions en utilisant le script backend/database.sql."
+      "title": "CRUD & SQL [DONE]",
+      "desc": "Toutes les routes d'API pour les cours, profils et inscriptions sont développées."
     },
     "uploads": {
-      "title": "Gestion des Vidéos",
-      "desc": "Configurer Multer pour l'upload des vidéos de cours et des photos de profil."
+      "title": "Gestion des Vidéos & Photos [DONE]",
+      "desc": "Multer configuré pour vidéos, miniatures et avatars."
     },
-    "admin_logic": {
-      "title": "Logique Admin",
-      "desc": "Implémenter la validation manuelle des instructeurs dans la base de données."
+    "security_mailing": {
+      "title": "Sécurité & Mailing [DONE]",
+      "desc": "JWT, Hashing, Password Reset et Emails de notification implémentés."
     }
   },
 
   "database_schema_preview": {
     "tables": ["users", "courses", "enrollments"],
-    "notes": "PostgreSQL. Script d'init dispo dans backend/database.sql"
+    "notes": "PostgreSQL. Script d'init dispo dans backend/database.sql [DONE]"
   },
 
-  "env_example": {
-    "PORT": "5000",
-    "DATABASE_URL": "postgres://user:password@localhost:5432/eqraa"
+  "deployment": {
+    "title": "Déploiement [A FAIRE]",
+    "desc": "Mise en ligne sur VPS ou plateforme Cloud (Heroku/Render) avec BDD managée."
   }
 }
