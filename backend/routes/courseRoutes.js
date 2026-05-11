@@ -3,7 +3,17 @@ const router = express.Router();
 const courseController = require('../controllers/courseController');
 const auth = require('../middleware/auth');
 const checkRole = require('../middleware/checkRole');
+const { body } = require('express-validator');
+const validate = require('../middleware/validator');
 const upload = require('../config/multer');
+
+const courseValidation = [
+  body('title').notEmpty().withMessage('Le titre est requis').trim().escape(),
+  body('description').optional().trim().escape(),
+  body('price').isNumeric().withMessage('Le prix doit être un nombre'),
+  body('category').notEmpty().withMessage('La catégorie est requise').trim().escape(),
+  validate
+];
 
 // Public routes
 router.get('/', courseController.getAllCourses);
@@ -17,6 +27,7 @@ router.post('/',
     { name: 'thumbnail', maxCount: 1 },
     { name: 'video', maxCount: 1 }
   ]), 
+  courseValidation,
   courseController.createCourse
 );
 
@@ -27,6 +38,7 @@ router.put('/:id',
     { name: 'thumbnail', maxCount: 1 },
     { name: 'video', maxCount: 1 }
   ]), 
+  courseValidation,
   courseController.updateCourse
 );
 

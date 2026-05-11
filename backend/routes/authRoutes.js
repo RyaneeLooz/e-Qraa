@@ -30,8 +30,18 @@ const forgotPasswordValidation = [
   validate
 ];
 
+// Validation for Reset Password
+const resetPasswordValidation = [
+  body('token').notEmpty().withMessage('Token requis'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Le mot de passe doit faire au moins 6 caractères'),
+  validate
+];
+
 router.post('/register', registerValidation, authController.register);
 router.post('/login', loginValidation, authController.login);
 router.post('/forgot-password', forgotPasswordValidation, authController.forgotPassword);
+router.post('/reset-password', resetPasswordValidation, authController.resetPassword);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const sendEmail = require('../config/mailer');
 
 exports.getProfile = async (req, res) => {
   try {
@@ -87,7 +88,7 @@ exports.verifyInstructor = async (req, res) => {
   const { instructorId } = req.params;
   try {
     const result = await db.query(
-      'UPDATE users SET is_verified = TRUE WHERE id = $1 AND role = $2 RETURNING id, name, is_verified',
+      'UPDATE users SET is_verified = TRUE WHERE id = $1 AND role = $2 RETURNING id, name, email, is_verified',
       [instructorId, 'instructor']
     );
 
@@ -95,7 +96,25 @@ exports.verifyInstructor = async (req, res) => {
       return res.status(404).json({ error: 'Instructeur non trouvé' });
     }
 
-    res.status(200).json({ message: 'Instructeur vérifié avec succès', instructor: result.rows[0] });
+    const instructor = result.rows[0];
+
+    // Notify instructor via email
+    const subject = 'Votre compte instructeur a été validé ! - e-Qraa';
+    const message = `
+      <h1>Félicitations ${instructor.name} !</h1>
+      <p>Votre compte instructeur sur la plateforme e-Qraa a été validé par l'administration.</p>
+      <p>Vous pouvez dès à présent commencer à publier vos cours et partager votre savoir.</p>
+      <a href="${process.env.FRONTEND_URL}/dashboard" target="_blank">Accéder à mon tableau de bord</a>
+    `;
+
+    try {
+      await sendEmail(instructor.email, subject, 'Votre compte a été validé', message);
+    } catch (mailErr) {
+      console.error('Erreur envoi email validation:', mailErr);
+      // We don't fail the request if email fails, but we log it
+    }
+
+    res.status(200).json({ message: 'Instructeur vérifié avec succès', instructor });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur lors de la vérification de l'instructeur" });
