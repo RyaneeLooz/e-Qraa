@@ -1,0 +1,48 @@
+{
+  "postgresql_setup_guide": {
+    "step_1_installation": {
+      "title": "Installation de PostgreSQL sur Windows",
+      "download_url": "https://www.enterprisedb.com/downloads/postgres-postgresql-downloads",
+      "instructions": [
+        "Télécharger l'installateur Windows (version 16 ou plus).",
+        "Lancer l'installation et laisser les composants par défaut (PostgreSQL Server, pgAdmin 4, Stack Builder, Command Line Tools).",
+        "IMPORTANT : Noter le mot de passe de l'utilisateur 'postgres' défini pendant l'installation.",
+        "Laisser le port par défaut : 5432.",
+        "Terminer l'installation."
+      ]
+    },
+    "step_2_creation_db": {
+      "title": "Création de la Base de Données 'eqraa'",
+      "tool": "pgAdmin 4 (Interface graphique)",
+      "instructions": [
+        "Ouvrir pgAdmin 4.",
+        "Déplier 'Servers' et se connecter à 'PostgreSQL' avec votre mot de passe.",
+        "Faire un clic droit sur 'Databases' -> 'Create' -> 'Database...'.",
+        "Nom de la base : 'eqraa'.",
+        "Cliquer sur 'Save'."
+      ]
+    },
+    "step_3_import_schema": {
+      "title": "Importation du Schéma et des Données",
+      "instructions": [
+        "Faire un clic droit sur la base 'eqraa' dans pgAdmin.",
+        "Choisir l'option 'Query Tool'.",
+        "Ouvrir le fichier 'backend/database.sql' de votre projet e-Qraa.",
+        "Copier tout le contenu du fichier SQL et le coller dans la fenêtre 'Query' de pgAdmin.",
+        "Appuyer sur la touche F5 ou cliquer sur l'icône 'Exécuter' (Play).",
+        "Vérifier que le message 'Query returned successfully' s'affiche."
+      ]
+    },
+    "step_4_link_to_project": {
+      "title": "Liaison au Backend Node.js",
+      "file_to_modify": "backend/.env",
+      "variable": "DATABASE_URL",
+      "format": "postgres://postgres:VOTRE_MOT_DE_PASSE@localhost:5432/eqraa",
+      "instruction": "Remplacez 'VOTRE_MOT_DE_PASSE' par le mot de passe réel de PostgreSQL choisi à l'étape 1."
+    },
+    "verification_check": {
+      "query": "SELECT * FROM users;",
+      "expected_result": "Vous devriez voir les 3 utilisateurs de test (Ahmed Prof, Sara Student, Admin e-Qraa)."
+    }
+  }
+}

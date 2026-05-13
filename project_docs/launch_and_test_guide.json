@@ -1,0 +1,88 @@
+{
+  "launch_and_test_guide": {
+    "step_1_database_setup": {
+      "title": "Initialisation de la Base de Données",
+      "actions": [
+        "Lancer PostgreSQL (Service local ou Docker).",
+        "Créer une base de données vide nommée 'eqraa'.",
+        "Exécuter le script SQL : 'backend/database.sql'.",
+        "Vérifier que les tables (users, courses, enrollments, promo_codes) sont bien créées."
+      ]
+    },
+    "step_2_environment_config": {
+      "title": "Configuration des Environnements",
+      "backend": {
+        "file": "backend/.env",
+        "check": [
+          "DATABASE_URL correspond à vos identifiants locaux.",
+          "PORT est fixé à 5000.",
+          "JWT_SECRET est présent."
+        ]
+      }
+    },
+    "step_3_launch_commands": {
+      "title": "Commandes de Lancement",
+      "backend": {
+        "directory": "backend/",
+        "commands": [
+          "npm install",
+          "npm run dev"
+        ],
+        "expected_output": "Server is running on port 5000"
+      },
+      "frontend": {
+        "directory": "frontend/",
+        "commands": [
+          "npm install",
+          "npm run dev"
+        ],
+        "expected_output": "VITE v...  ready in ... ms"
+      }
+    },
+    "step_4_test_scenarios": [
+      {
+        "scenario": "Authentification & Profil",
+        "steps": [
+          "S'inscrire en tant qu'Étudiant.",
+          "Se déconnecter et se reconnecter.",
+          "Modifier son avatar et sa biographie dans le profil."
+        ]
+      },
+      {
+        "scenario": "Achat de Cours & Coins",
+        "steps": [
+          "Vérifier le solde initial (0 🟡).",
+          "Aller dans le Dashboard -> Recharger Coins.",
+          "Activer un pack de Coins (Simulé) ou un Code Promo.",
+          "Ajouter un cours au Panier.",
+          "Passer à la caisse et vérifier la déduction des Coins.",
+          "Accéder au cours acheté."
+        ]
+      },
+      {
+        "scenario": "Administration",
+        "steps": [
+          "Se connecter avec admin@e-qraa.dz.",
+          "Vérifier les statistiques globales.",
+          "Valider un formateur en attente.",
+          "Créer un nouveau code promo et le tester avec un compte étudiant."
+        ]
+      },
+      {
+        "scenario": "Vue Formateur",
+        "steps": [
+          "S'inscrire comme formateur.",
+          "Vérifier la bannière 'En attente de vérification'.",
+          "Après validation par l'admin, tenter de créer un cours.",
+          "Vérifier les statistiques de revenus (80% pour le prof)."
+        ]
+      }
+    ],
+    "troubleshooting": {
+      "connection_error": "Si l'API ne répond pas, vérifiez que le backend tourne sur le port 5000.",
+      "database_error": "Si l'authentification échoue, vérifiez les logs du backend pour des erreurs de connexion PostgreSQL.",
+      "cors_error": "Vérifiez que FRONTEND_URL dans le .env du backend est bien http://localhost:5173."
+    },
+    "final_check": "Ouvrez la console du navigateur (F12) pour voir si des erreurs rouges apparaissent lors des clics."
+  }
+}

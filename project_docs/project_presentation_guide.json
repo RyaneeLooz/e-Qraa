@@ -1,0 +1,127 @@
+{
+  "presentation_guide": {
+    "vision_generale": {
+      "nom_du_projet": "e-Qraa",
+      "objectif_principal": "Créer une marketplace éducative moderne et accessible, spécifiquement conçue pour le contexte algérien, facilitant la rencontre entre formateurs qualifiés et étudiants.",
+      "probleme_resolu": "Manque de plateformes centralisées pour l'apprentissage en ligne en Algérie, difficulté de paiement (absence de cartes internationales), et besoin de validation rigoureuse des compétences des formateurs.",
+      "public_cible": [
+        "Étudiants (universitaires, scolaires, professionnels) cherchant des formations de qualité.",
+        "Enseignants et experts souhaitant monétiser leur savoir.",
+        "Administrateurs cherchant à réguler et assurer la qualité éducative."
+      ],
+      "utilite_du_projet": "Démocratise l'accès au savoir avec un système de paiement local (Coins), offre une interface intuitive et premium, et garantit la qualité via un processus de vérification manuelle."
+    },
+    "architecture_complete": {
+      "frontend": "React 19 avec Vite pour une rapidité de développement et de rendu exceptionnelle.",
+      "backend": "Node.js avec Express.js, offrant une architecture RESTful robuste et scalable.",
+      "communication": "Requêtes HTTP asynchrones via l'API Fetch, sécurisées par des Tokens JWT (JSON Web Tokens).",
+      "base_de_donnees": "PostgreSQL pour une gestion relationnelle intègre des données (utilisateurs, cours, inscriptions).",
+      "choix_technologiques": [
+        {
+          "techno": "React & Vite",
+          "raison": "Composants réutilisables, DOM virtuel pour la performance, et rechargement à chaud ultra-rapide avec Vite."
+        },
+        {
+          "techno": "Tailwind CSS v4",
+          "raison": "Design premium, responsive et extrêmement rapide à implémenter sans fichiers CSS volumineux."
+        },
+        {
+          "techno": "Node/Express",
+          "raison": "Écosystème JavaScript unifié (JS partout), gestion efficace des entrées/sorties non-bloquantes."
+        },
+        {
+          "techno": "PostgreSQL",
+          "raison": "Fiabilité des transactions, support des relations complexes et scalabilité pour des milliers d'utilisateurs."
+        }
+      ]
+    },
+    "structure_dossiers_fichiers": {
+      "backend": {
+        "config/db.js": "Configuration de la connexion au pool PostgreSQL. Centralise les accès à la base.",
+        "controllers/": "Logique métier. Traite les requêtes, interagit avec la DB et renvoie les réponses JSON.",
+        "middleware/": "Filtres de sécurité. 'auth.js' vérifie le JWT, 'checkRole.js' restreint l'accès selon le rôle (Admin/Prof).",
+        "routes/": "Définition des points d'entrée API. Relie les URLs aux méthodes des contrôleurs.",
+        "uploads/": "Stockage physique des images de profil et miniatures de cours.",
+        "server.js": "Point d'entrée principal. Initialise Express, les middlewares globaux et les routes."
+      },
+      "frontend": {
+        "src/components/": "Éléments UI réutilisables (Navbar, Footer, Spinner, CourseCard).",
+        "src/context/AuthContext.jsx": "Cerveau de l'application. Gère l'état global de l'utilisateur, le solde de Coins et le panier.",
+        "src/pages/": "Vues principales (Dashboard, Marketplace, Admin, Cart).",
+        "src/services/api.js": "Couche d'abstraction API. Regroupe tous les appels Fetch pour une maintenance facile.",
+        "App.jsx": "Gestionnaire de routes principal (React Router)."
+      }
+    },
+    "details_frontend": {
+      "state_management": "Utilisation de l'API Context de React pour éviter le 'prop drilling' et partager l'état de l'utilisateur globalement.",
+      "routing": "React Router DOM pour une Navigation Single Page Application (SPA) fluide sans rechargement de page.",
+      "ui_ux": "Design 'Glassmorphism' et 'Clean UI' avec des gradients modernes et des animations subtiles pour une expérience premium.",
+      "api_calls": "Encapsulés dans des objets (authAPI, coursesAPI, etc.) avec gestion centralisée des headers de sécurité."
+    },
+    "details_backend": {
+      "securite": "Hashage des mots de passe (Bcrypt), protection contre les injections SQL via des requêtes paramétrées, et authentification JWT.",
+      "gestion_erreurs": "Middleware global d'erreur renvoyant des messages clairs au frontend pour améliorer l'expérience utilisateur.",
+      "api_design": "Architecture REST respectant les codes HTTP standards (200 OK, 201 Created, 401 Unauthorized, 500 Error)."
+    },
+    "flux_fonctionnement": [
+      "1. Chargement : Le site vérifie si un Token JWT valide est présent dans le localStorage.",
+      "2. Authentification : L'AuthContext récupère le profil complet (solde, rôle) depuis le backend.",
+      "3. Navigation : L'utilisateur explore les cours (requête GET /api/courses).",
+      "4. Action : L'utilisateur ajoute un cours au panier (état local) puis paye (POST /api/enrollments).",
+      "5. Persistance : Le serveur vérifie le solde, déduit les coins, crée l'inscription et répond au client.",
+      "6. Mise à jour : Le frontend rafraîchit le solde et affiche un message de succès."
+    ],
+    "fonctionnalites_cles": [
+      {
+        "nom": "Système de Coins (e-Qraa Coins)",
+        "fonctionnement": "Monnaie virtuelle permettant de contourner les limites de paiement en ligne en Algérie.",
+        "technique": "Calculs côté serveur avec transactions SQL pour garantir l'intégrité du solde."
+      },
+      {
+        "nom": "Panel Admin & Validation",
+        "fonctionnement": "Validation manuelle des formateurs pour garantir la qualité pédagogique.",
+        "technique": "Système de rôles et flags (is_verified) en base de données."
+      },
+      {
+        "nom": "Codes Promo",
+        "fonctionnement": "Marketing et fidélisation via des codes de recharge.",
+        "technique": "Table promo_codes avec limite d'utilisations (max_uses) et état (Actif/Expiré)."
+      }
+    ],
+    "questions_jury": [
+      {
+        "question": "Pourquoi avoir choisi PostgreSQL plutôt que MongoDB ?",
+        "reponse": "Pour l'intégrité des données financières (Coins). Les transactions SQL garantissent que si un paiement échoue, aucun coin n'est perdu et aucune inscription n'est créée à tort."
+      },
+      {
+        "question": "Comment gérez-vous la sécurité des fichiers uploadés ?",
+        "reponse": "Les fichiers sont servis de manière statique via Express, et nous limitons les types de fichiers acceptés pour éviter l'exécution de scripts malveillants."
+      },
+      {
+        "question": "Comment le système de panier survit-il au rafraîchissement de la page ?",
+        "reponse": "Le panier est stocké dans le localStorage via l'AuthContext, permettant une persistance sans base de données pour les éléments non-achetés."
+      }
+    ],
+    "difficultes_et_solutions": [
+      {
+        "probleme": "Désynchronisation du solde de Coins entre le front et le back.",
+        "solution": "Implémentation d'une fonction refreshUser() appelée après chaque transaction importante pour garantir que le frontend reflète toujours la base de données."
+      },
+      {
+        "probleme": "Complexité de la gestion des rôles (Admin/Prof/Étudiant).",
+        "solution": "Création d'un middleware checkRole dynamique côté backend capable de vérifier plusieurs rôles simultanément."
+      }
+    ],
+    "perspectives_futures": [
+      "Application mobile native (React Native) utilisant le même backend.",
+      "Système de cours en direct (WebRTC / Zoom Integration).",
+      "Intelligence Artificielle pour recommander des cours selon le profil de l'étudiant."
+    ],
+    "resumes_oraux": {
+      "2_minutes": "e-Qraa est une marketplace éducative innovante pour l'Algérie. Nous avons construit une plateforme complète avec React et Node.js utilisant un système de monnaie virtuelle 'e-Qraa Coins' pour faciliter l'accès au savoir. Les points forts sont la sécurité JWT, une base PostgreSQL pour l'intégrité des paiements, et un panel admin robuste pour la modération.",
+      "5_minutes": "Présentation du problème (paiement et qualité) -> Solution e-Qraa -> Démo rapide (Marketplace, Achat, Dashboard) -> Focus technique (Architecture REST, Context API pour l'état, Middlewares de sécurité) -> Conclusion sur la valeur ajoutée.",
+      "10_minutes": "Explication détaillée de la pile MERN (Postgres au lieu de Mongo) -> Walkthrough du code (Routes Express, Logique de transaction pour l'inscription) -> Présentation de la gamification (Leaderboard) -> Analyse de la sécurité (JWT, Bcrypt) -> Session Q&A préparée."
+    },
+    "conclusion": "Ce projet démontre une maîtrise complète du cycle de développement web (Fullstack). Au-delà de l'aspect technique, il répond à un besoin sociétal réel en Algérie en modernisant l'accès à l'éducation de qualité."
+  }
+}
