@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = await db.query(
-      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role',
+      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role, coins, is_verified',
       [name, email, hashedPassword, role || 'student']
     );
 
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
 
     res.status(200).json({
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role, coins: user.coins }
+      user: { id: user.id, name: user.name, email: user.email, role: user.role, coins: user.coins, is_verified: user.is_verified }
     });
   } catch (err) {
     console.error(err);

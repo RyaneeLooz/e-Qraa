@@ -5,7 +5,7 @@ exports.getProfile = async (req, res) => {
   try {
     // req.user comes from the auth middleware
     const result = await db.query(
-      'SELECT id, name, email, role, coins, bio, avatar_url, created_at FROM users WHERE id = $1',
+      'SELECT id, name, email, role, coins, bio, avatar_url, is_verified, created_at FROM users WHERE id = $1',
       [req.user.id]
     );
     

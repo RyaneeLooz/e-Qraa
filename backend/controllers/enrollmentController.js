@@ -145,11 +145,44 @@ exports.getAdminStats = async (req, res) => {
 
     const userCountResult = await db.query('SELECT COUNT(*) FROM users');
     const courseCountResult = await db.query('SELECT COUNT(*) FROM courses');
+    const enrollmentCountResult = await db.query('SELECT COUNT(*) FROM enrollments');
+
+    // Breakdown by role
+    const studentCountResult = await db.query("SELECT COUNT(*) FROM users WHERE role = 'student'");
+    const instructorCountResult = await db.query("SELECT COUNT(*) FROM users WHERE role = 'instructor'");
+    const verifiedInstructorCount = await db.query("SELECT COUNT(*) FROM users WHERE role = 'instructor' AND is_verified = TRUE");
+    const pendingInstructorCount = await db.query("SELECT COUNT(*) FROM users WHERE role = 'instructor' AND is_verified = FALSE");
+
+    // Active promo codes
+    const activePromoCount = await db.query("SELECT COUNT(*) FROM promo_codes WHERE status = 'Actif'");
+
+    // Recent enrollments (5 latest)
+    const recentEnrollments = await db.query(`
+      SELECT e.enrolled_at, u.name as student_name, c.title as course_title, c.price
+      FROM enrollments e
+      JOIN users u ON e.student_id = u.id
+      JOIN courses c ON e.course_id = c.id
+      ORDER BY e.enrolled_at DESC
+      LIMIT 5
+    `);
+
+    // Recent users (5 latest)
+    const recentUsers = await db.query(
+      "SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 5"
+    );
 
     res.status(200).json({
       total_commission: Math.floor(parseFloat(commissionResult.rows[0].total_commission || 0)),
       total_users: parseInt(userCountResult.rows[0].count),
-      total_courses: parseInt(courseCountResult.rows[0].count)
+      total_courses: parseInt(courseCountResult.rows[0].count),
+      total_enrollments: parseInt(enrollmentCountResult.rows[0].count),
+      total_students: parseInt(studentCountResult.rows[0].count),
+      total_instructors: parseInt(instructorCountResult.rows[0].count),
+      verified_instructors: parseInt(verifiedInstructorCount.rows[0].count),
+      pending_instructors: parseInt(pendingInstructorCount.rows[0].count),
+      active_promos: parseInt(activePromoCount.rows[0].count),
+      recent_enrollments: recentEnrollments.rows,
+      recent_users: recentUsers.rows,
     });
   } catch (err) {
     console.error(err);

@@ -1,0 +1,174 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+% Geometry setup
+\geometry{
+    a4paper,
+    total={170mm,257mm},
+    left=20mm,
+    top=20mm,
+}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={e-Qraa Project Overview},
+    pdfpagemode=FullScreen,
+}
+
+\title{\textbf{e-Qraa 2.0}\\ \large Comprehensive Project Overview \& Architecture Document}
+\author{Project Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{General Vision}
+\textbf{Project Name:} e-Qraa  \\
+\textbf{Main Objective:} Create a modern and accessible educational marketplace, specifically designed for the Algerian context, facilitating the meeting between qualified trainers and students.  \\
+\textbf{Problem Solved:} Lack of centralized platforms for online learning in Algeria, difficulty in payment (absence of international cards), and the need for rigorous validation of trainers' skills.
+
+\subsection{Target Audience}
+\begin{itemize}[noitemsep]
+    \item Students (university, school, professional) looking for quality training.
+    \item Teachers and experts wishing to monetize their knowledge.
+    \item Administrators looking to regulate and ensure educational quality.
+\end{itemize}
+
+\textbf{Project Utility:} Democratizes access to knowledge with a local payment system (Coins), offers an intuitive and premium interface, and guarantees quality via a manual verification process.
+
+\section{Complete Architecture}
+\begin{itemize}[noitemsep]
+    \item \textbf{Frontend:} React 19 with Vite for exceptional development and rendering speed.
+    \item \textbf{Backend:} Node.js with Express.js, offering a robust and scalable RESTful architecture.
+    \item \textbf{Communication:} Asynchronous HTTP requests via the Fetch API, secured by JWT Tokens (JSON Web Tokens).
+    \item \textbf{Database:} PostgreSQL for integral relational data management (users, courses, enrollments).
+\end{itemize}
+
+\subsection{Technological Choices}
+\begin{table}[h]
+    \centering
+    \begin{tabularx}{\textwidth}{l X}
+        \toprule
+        \textbf{Technology} & \textbf{Reason} \\
+        \midrule
+        \textbf{React \& Vite} & Reusable components, virtual DOM for performance, and ultra-fast hot reloading with Vite. \\
+        \textbf{Tailwind CSS v4} & Premium design, responsive and extremely fast to implement without bulky CSS files. \\
+        \textbf{Node/Express} & Unified JavaScript ecosystem (JS everywhere), efficient management of non-blocking I/O. \\
+        \textbf{PostgreSQL} & Transaction reliability, support for complex relations, and scalability for thousands of users. \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Summary of Technological Choices}
+\end{table}
+
+\section{Folder and File Structure}
+\subsection{Backend}
+\begin{description}
+    \item[\texttt{config/db.js}] Configuration of the PostgreSQL pool connection. Centralizes database access.
+    \item[\texttt{controllers/}] Business logic. Processes requests, interacts with the DB, and returns JSON responses.
+    \item[\texttt{middleware/}] Security filters. \texttt{auth.js} verifies the JWT, \texttt{checkRole.js} restricts access according to role (Admin/Prof).
+    \item[\texttt{routes/}] Definition of API entry points. Links URLs to controller methods.
+    \item[\texttt{uploads/}] Physical storage of profile pictures and course thumbnails.
+    \item[\texttt{server.js}] Main entry point. Initializes Express, global middlewares, and routes.
+\end{description}
+
+\subsection{Frontend}
+\begin{description}
+    \item[\texttt{src/components/}] Reusable UI elements (Navbar, Footer, Spinner, CourseCard).
+    \item[\texttt{src/context/AuthContext.jsx}] Application brain. Manages global user state, Coins balance, and cart.
+    \item[\texttt{src/pages/}] Main views (Dashboard, Marketplace, Admin, Cart).
+    \item[\texttt{src/services/api.js}] API abstraction layer. Groups all Fetch calls for easy maintenance.
+    \item[\texttt{App.jsx}] Main route manager (React Router).
+\end{description}
+
+\section{Technical Details}
+\subsection{Frontend Details}
+\begin{itemize}[noitemsep]
+    \item \textbf{State Management:} Use of React's Context API to avoid prop drilling and share user state globally.
+    \item \textbf{Routing:} React Router DOM for smooth Single Page Application (SPA) navigation without page reloads.
+    \item \textbf{UI/UX:} 'Glassmorphism' and 'Clean UI' design with modern gradients and subtle animations for a premium experience.
+    \item \textbf{API Calls:} Encapsulated in objects (authAPI, coursesAPI, etc.) with centralized management of security headers.
+\end{itemize}
+
+\subsection{Backend Details}
+\begin{itemize}[noitemsep]
+    \item \textbf{Security:} Password hashing (Bcrypt), protection against SQL injections via parameterized queries, and JWT authentication.
+    \item \textbf{Error Management:} Global error middleware returning clear messages to the frontend to improve user experience.
+    \item \textbf{API Design:} REST architecture respecting standard HTTP codes (200 OK, 201 Created, 401 Unauthorized, 500 Error).
+\end{itemize}
+
+\section{Operating Flow}
+\begin{enumerate}
+    \item \textbf{Loading:} The site checks if a valid JWT Token is present in localStorage.
+    \item \textbf{Authentication:} AuthContext retrieves the full profile (balance, role) from the backend.
+    \item \textbf{Navigation:} The user explores courses (GET request to \texttt{/api/courses}).
+    \item \textbf{Action:} The user adds a course to the cart (local state) and then pays (POST request to \texttt{/api/enrollments}).
+    \item \textbf{Persistence:} The server verifies the balance, deducts coins, creates the enrollment, and responds to the client.
+    \item \textbf{Update:} The frontend refreshes the balance and displays a success message.
+\end{enumerate}
+
+\section{Key Features}
+\begin{description}
+    \item[e-Qraa Coins System] \hfill \\
+    \textit{Operation:} Virtual currency allowing users to bypass online payment limits in Algeria. \\
+    \textit{Technical:} Server-side calculations with SQL transactions to guarantee balance integrity.
+    
+    \item[Admin Panel \& Validation] \hfill \\
+    \textit{Operation:} Manual validation of trainers to ensure pedagogical quality. \\
+    \textit{Technical:} Role system and flags (\texttt{is\_verified}) in the database.
+    
+    \item[Promo Codes] \hfill \\
+    \textit{Operation:} Marketing and loyalty via recharge codes. \\
+    \textit{Technical:} \texttt{promo\_codes} table with use limits (\texttt{max\_uses}) and state (Active/Expired).
+\end{description}
+
+\section{Difficulties and Solutions}
+\begin{itemize}
+    \item \textbf{Problem:} Desynchronization of the Coins balance between the frontend and backend. \\
+    \textbf{Solution:} Implementation of a \texttt{refreshUser()} function called after each major transaction to ensure the frontend always reflects the database.
+    \item \textbf{Problem:} Complexity of role management (Admin/Prof/Student). \\
+    \textbf{Solution:} Creation of a dynamic \texttt{checkRole} middleware on the backend capable of checking multiple roles simultaneously.
+\end{itemize}
+
+\section{Future Perspectives}
+\begin{itemize}[noitemsep]
+    \item Native mobile application (React Native) using the same backend.
+    \item Live course system (WebRTC / Zoom Integration).
+    \item Artificial Intelligence to recommend courses based on the student's profile.
+\end{itemize}
+
+\section{Anticipated Jury Questions}
+\begin{description}
+    \item[Q: Why choose PostgreSQL over MongoDB?] \hfill \\
+    \textbf{A:} For the integrity of financial data (Coins). SQL transactions guarantee that if a payment fails, no coin is lost and no enrollment is mistakenly created.
+    
+    \item[Q: How do you handle the security of uploaded files?] \hfill \\
+    \textbf{A:} Files are served statically via Express, and we limit the types of accepted files to prevent the execution of malicious scripts.
+    
+    \item[Q: How does the cart system survive a page refresh?] \hfill \\
+    \textbf{A:} The cart is stored in \texttt{localStorage} via \texttt{AuthContext}, allowing persistence without a database for unpurchased items.
+\end{description}
+
+\section{Conclusion}
+This project demonstrates complete mastery of the web development lifecycle (Fullstack). Beyond the technical aspect, it responds to a real societal need in Algeria by modernizing access to quality education.
+
+\end{document}

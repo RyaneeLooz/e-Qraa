@@ -113,30 +113,169 @@ export default function Admin() {
       {/* ===== VUE D'ENSEMBLE ===== */}
       {activeTab === "overview" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <div className="text-slate-500 text-sm mb-1">Total Utilisateurs</div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg">👥</div>
+                <div className="text-slate-500 text-sm font-medium">Total Utilisateurs</div>
+              </div>
               <div className="text-3xl font-bold text-blue-600">{stats?.total_users || 0}</div>
+              <div className="flex gap-4 mt-3 text-xs text-slate-500">
+                <span>🎓 {stats?.total_students || 0} étudiants</span>
+                <span>👨‍🏫 {stats?.total_instructors || 0} formateurs</span>
+              </div>
             </div>
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <div className="text-slate-500 text-sm mb-1">Cours Publiés</div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-lg">📚</div>
+                <div className="text-slate-500 text-sm font-medium">Cours Publiés</div>
+              </div>
               <div className="text-3xl font-bold text-green-600">{stats?.total_courses || 0}</div>
+              <div className="mt-3 text-xs text-slate-500">
+                📝 {stats?.total_enrollments || 0} inscriptions au total
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <div className="text-slate-500 text-sm mb-1">Revenus Plateforme (20%)</div>
-              <div className="text-3xl font-bold text-emerald-600">{stats?.total_commission || 0} 🟡</div>
-            </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-              <div className="text-slate-500 text-sm mb-1">En attente</div>
-              <div className="text-3xl font-bold text-orange-500">{pendingInstructors.length}</div>
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-700 p-6 rounded-2xl shadow-sm text-white">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-lg">💰</div>
+                <div className="text-emerald-100 text-sm font-medium">Revenus Plateforme (20%)</div>
+              </div>
+              <div className="text-3xl font-bold">{stats?.total_commission || 0} 🟡</div>
+              <div className="mt-3 text-xs text-emerald-200">
+                Commission automatique sur chaque vente
+              </div>
             </div>
           </div>
 
-          <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
-            <h3 className="text-lg font-bold text-blue-900 mb-2">Bienvenue dans votre panel admin</h3>
-            <p className="text-blue-700 text-sm">
-              Toutes les données affichées ici sont synchronisées en temps réel avec la base de données PostgreSQL.
-            </p>
+          {/* Notifications / Alertes Admin */}
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              🔔 Notifications & Alertes
+            </h3>
+            <div className="space-y-3">
+              {/* Pending instructors alert */}
+              {(stats?.pending_instructors || 0) > 0 ? (
+                <div className="flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-orange-200 rounded-lg flex items-center justify-center text-sm">⏳</div>
+                    <div>
+                      <p className="font-medium text-orange-900 text-sm">Formateurs en attente de vérification</p>
+                      <p className="text-xs text-orange-600">{stats.pending_instructors} demande{stats.pending_instructors > 1 ? "s" : ""} à traiter</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setActiveTab("instructors")} className="px-3 py-1.5 bg-orange-600 text-white text-xs font-bold rounded-lg hover:bg-orange-700 transition-colors">
+                    Voir →
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
+                  <div className="w-8 h-8 bg-green-200 rounded-lg flex items-center justify-center text-sm">✅</div>
+                  <p className="font-medium text-green-800 text-sm">Aucun formateur en attente — tout est à jour !</p>
+                </div>
+              )}
+
+              {/* Instructors stats */}
+              <div className="flex items-center justify-between p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-purple-200 rounded-lg flex items-center justify-center text-sm">👨‍🏫</div>
+                  <div>
+                    <p className="font-medium text-purple-900 text-sm">Formateurs vérifiés</p>
+                    <p className="text-xs text-purple-600">{stats?.verified_instructors || 0} formateur{(stats?.verified_instructors || 0) > 1 ? "s" : ""} actif{(stats?.verified_instructors || 0) > 1 ? "s" : ""} sur la plateforme</p>
+                  </div>
+                </div>
+                <span className="text-lg font-bold text-purple-700">{stats?.verified_instructors || 0}/{stats?.total_instructors || 0}</span>
+              </div>
+
+              {/* Active promos */}
+              <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-200 rounded-lg flex items-center justify-center text-sm">🎟️</div>
+                  <div>
+                    <p className="font-medium text-blue-900 text-sm">Codes promo actifs</p>
+                    <p className="text-xs text-blue-600">{stats?.active_promos || 0} code{(stats?.active_promos || 0) > 1 ? "s" : ""} promo en circulation</p>
+                  </div>
+                </div>
+                <button onClick={() => setActiveTab("promos")} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors">
+                  Gérer →
+                </button>
+              </div>
+
+              {/* Enrollments */}
+              <div className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center text-sm">📊</div>
+                <div>
+                  <p className="font-medium text-slate-800 text-sm">Total inscriptions</p>
+                  <p className="text-xs text-slate-500">{stats?.total_enrollments || 0} étudiants inscrits à des cours</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Recent Enrollments */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">📝 Inscriptions récentes</h3>
+              {stats?.recent_enrollments?.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.recent_enrollments.map((e, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-slate-800 text-sm truncate">{e.student_name}</p>
+                        <p className="text-xs text-slate-500 truncate">→ {e.course_title}</p>
+                      </div>
+                      <div className="text-right ml-3 shrink-0">
+                        <span className="text-xs font-bold text-yellow-600">
+                          {e.price === 0 ? <span className="text-green-600">Gratuit</span> : `${e.price} 🟡`}
+                        </span>
+                        <p className="text-[10px] text-slate-400 mt-0.5">
+                          {new Date(e.enrolled_at).toLocaleDateString('fr-FR')}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-400 text-sm text-center py-6 italic">Aucune inscription pour le moment.</p>
+              )}
+            </div>
+
+            {/* Recent Users */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">🆕 Derniers inscrits</h3>
+              {stats?.recent_users?.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.recent_users.map((u) => (
+                    <div key={u.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-600 shrink-0">
+                          {u.name.charAt(0)}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-800 text-sm truncate">{u.name}</p>
+                          <p className="text-xs text-slate-400 truncate">{u.email}</p>
+                        </div>
+                      </div>
+                      <div className="text-right ml-3 shrink-0">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          u.role === "student" ? "bg-blue-50 text-blue-600" :
+                          u.role === "admin" ? "bg-red-50 text-red-600" :
+                          "bg-purple-50 text-purple-600"
+                        }`}>
+                          {u.role === "student" ? "Étudiant" : u.role === "admin" ? "Admin" : "Formateur"}
+                        </span>
+                        <p className="text-[10px] text-slate-400 mt-1">
+                          {new Date(u.created_at).toLocaleDateString('fr-FR')}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-400 text-sm text-center py-6 italic">Aucun utilisateur pour le moment.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -170,6 +309,9 @@ export default function Admin() {
                       </span>
                       <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-lg font-medium">
                         🪪 {instructor.id_card_number || "N/A"}
+                      </span>
+                      <span className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-lg font-medium">
+                        📅 {new Date(instructor.created_at).toLocaleDateString('fr-FR')}
                       </span>
                     </div>
                   </div>
@@ -214,20 +356,30 @@ export default function Admin() {
                   </td>
                   <td className="px-6 py-4">
                     <span className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                      u.role === "student" ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700"
+                      u.role === "student" ? "bg-blue-50 text-blue-700" :
+                      u.role === "admin" ? "bg-red-50 text-red-700" :
+                      "bg-purple-50 text-purple-700"
                     }`}>
-                      {u.role === "student" ? "🎓 Étudiant" : "👨‍🏫 Formateur"}
+                      {u.role === "student" ? "🎓 Étudiant" : u.role === "admin" ? "🛡️ Admin" : "👨‍🏫 Formateur"}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                      u.is_verified ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
-                    }`}>
-                      {u.is_verified ? "Vérifié" : "En attente"}
-                    </span>
+                    {u.role === "instructor" ? (
+                      <span className={`text-xs font-bold px-2 py-1 rounded-full ${
+                        u.is_verified ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
+                      }`}>
+                        {u.is_verified ? "Vérifié" : "En attente"}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-slate-400">—</span>
+                    )}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="font-bold text-yellow-600">{u.coins?.toLocaleString()} 🟡</span>
+                    {u.role === "student" ? (
+                      <span className="font-bold text-yellow-600">{u.coins?.toLocaleString()} 🟡</span>
+                    ) : (
+                      <span className="text-xs text-slate-400">—</span>
+                    )}
                   </td>
                 </tr>
               ))}
